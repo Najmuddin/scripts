@@ -147,6 +147,13 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       mirror dump rename move link info showmounts fixmountpath" -- ${cur}) )
       return 0
 	;;
+      -columns)
+      COMPREPLY=( $(compgen -W "bmi bmo br bs csvc ncp cpc dsa fda drk dsc dro dst dsu dwk dwo nfd \
+fhb gw h hd nhmm hmf hn id ip jhb lla mac nmd mct mt mu nm ndh nha \
+nmc nma nmw nrs nmc pma rpf rpi rpo rpc svc sca  sfsa shma shra sha \
+sja sna sta swa sp tsa tla rp tms tmu trs tru cpt cpu vma vip vipe " -- ${cur}) )
+      return 0
+	;;	
       list)   # service , disk 
 	  if [ $pPrev == "disk" ]; then
 	    COMPREPLY=( $(compgen -W "-host -system -output" -- ${cur}) )
