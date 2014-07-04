@@ -11,12 +11,14 @@ __maprcli()
   local cur prev opts base
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD -1]}"
+  pPrev="${COMP_WORDS[COMP_CWORD -2]}"
   first="${COMP_WORDS[1]}"
   numArgs="${#COMP_WORDS[@]}"
   service_action="start stop suspend resume restart"
   acl_opts="-type -name -cluster -user -group"
   opts="acl alarm blacklist config dashboard  debugdb dialhome disk dump entity job license \
 nagios nfsmgmt node rlimit schedule security service setloglevel table task trace urls virtualip volume"
+
 
   case "${prev}" in
       acl)
@@ -145,6 +147,19 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       mirror dump rename move link info showmounts fixmountpath" -- ${cur}) )
       return 0
 	;;
+      list)   # service , disk 
+	  if [ $pPrev == "disk" ]; then
+	    COMPREPLY=( $(compgen -W "-host -system -output" -- ${cur}) )
+	    return 0
+	    fi
+	  if [ $pPrev == "node" ]; then
+	    COMPREPLY=( $(compgen -W  "-alarmednodes -cluster -columns -filter -limit \
+	    -nfsnodes -output -start -zkconnect" -- ${cur}) )
+	    return 0
+	  fi
+	  return 1
+	;;
+	
     *)
     ;;
     esac
