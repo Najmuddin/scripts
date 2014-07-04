@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to do auto-completion for maprcli command.
+# TAB auto completion for maprcli.
 
 # COMPREPLY: an array containing possible completions as a result of your function
 # COMP_WORDS: an array containing individual command arguments typed so far
