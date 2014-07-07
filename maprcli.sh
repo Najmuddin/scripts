@@ -12,7 +12,7 @@ __maprcli()
   numArgs="${#COMP_WORDS[@]}"
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD -1]}"
-  if [ $numArgs -gt 1 ] ; then
+  if [ $numArgs -gt 2 ] ; then
     pPrev="${COMP_WORDS[COMP_CWORD -2]}"
   fi
   first="${COMP_WORDS[1]}"
@@ -24,7 +24,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 
   case "${prev}" in
       acl)
-      COMPREPLY=( $(compgen -W "show set edit" -- ${cur}) ) # FIXME add -type & -name
+      COMPREPLY=( $(compgen -W "show set edit" -- ${cur}) ) 
 	return 0
 	;;
 	  set|edit)
