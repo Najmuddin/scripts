@@ -8,12 +8,13 @@
 
 __maprcli()
   {
-  local cur prev pPrev first numArgs acl_opts base 
+  local cur prev prev2 first numArgs acl_opts base 
   numArgs="${#COMP_WORDS[@]}"
+# Read the current, last and last to last arguments typed by the user.  
   cur="${COMP_WORDS[COMP_CWORD]}"
   prev="${COMP_WORDS[COMP_CWORD -1]}"
   if [ $numArgs -gt 2 ] ; then
-    pPrev="${COMP_WORDS[COMP_CWORD -2]}"
+    prev2="${COMP_WORDS[COMP_CWORD -2]}"
   fi
   first="${COMP_WORDS[1]}"
 
@@ -157,11 +158,11 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       return 0
 	;;	
       list)   # service , disk 
-	  if [ $pPrev == "disk" ]; then
+	  if [ $prev2 == "disk" ]; then
 	    COMPREPLY=( $(compgen -W "-host -system -output" -- ${cur}) )
 	    return 0
 	    fi
-	  if [ $pPrev == "node" ]; then
+	  if [ $prev2 == "node" ]; then
 	    COMPREPLY=( $(compgen -W  "-alarmednodes -cluster -columns -filter -limit \
 	    -nfsnodes -output -start -zkconnect" -- ${cur}) )
 	    return 0
