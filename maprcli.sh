@@ -6,9 +6,14 @@
 # COMP_CWORD: the index of the command argument containing the current cursor position
 # COMP_LINE: the current command line
 
+__list_all_nodes() {
+local nodes=$(maprcli node list -columns hn |awk '{print $1}'|tail -n +2)
+COMPREPLY=($(compgen -W "$nodes" -- ${cur}))
+  }
+
 __maprcli()
   {
-  local cur prev prev2 first numArgs acl_opts base 
+  local prev prev2 first numArgs acl_opts base 
   numArgs="${#COMP_WORDS[@]}"
 # Read the current, last and last to last arguments typed by the user.  
   cur="${COMP_WORDS[COMP_CWORD]}"
@@ -37,6 +42,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	  COMPREPLY=( $(compgen -W "${acl_opts} -perm -output" -- ${cur}) )
 	  return 0
 	  ;;
+	  
       alarm)
       COMPREPLY=( $(compgen -W "list raise clear clearall config names" -- ${cur}) )
       return 0
@@ -45,11 +51,11 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       COMPREPLY=( $(compgen -W "user listusers" -- ${cur}) )
       return 0
 	;;
+	
       config)
       COMPREPLY=( $(compgen -W "load save" -- ${cur}) )
       return 0
 	;;
-	
 	load) # config load. 
 	  if [ $prev2 == "config" ]; then
 	    COMPREPLY=( $(compgen -W "-keys -cluster" -- ${cur}) )
@@ -57,7 +63,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	    fi
 	    return 1
 	;;
-	save) # config load. 
+	save) # config save 
 	  if [ $prev2 == "config" ]; then
 	    COMPREPLY=( $(compgen -W "-values -test -cluster" -- ${cur}) )
 	    return 0
@@ -65,7 +71,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	    return 1
 	;;
 	
-	dashboard)
+      dashboard)
       COMPREPLY=( $(compgen -W "info" -- ${cur}) ) # FIXME
       return 0
 	;;
@@ -121,7 +127,10 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	 -action|-cldb|-fileserver|-hbmaster|-hbregionserver|-jobtracker|-nfs|-tasktracker|-webserver) 
 	  COMPREPLY=( $(compgen -W "${service_action}" -- ${cur}) )
 	  return 0
-	    ;;	  
+	    ;;
+      -nodes|-node)
+	  __list_all_nodes
+	  ;;
       rlimit)
       COMPREPLY=( $(compgen -W "set get" -- ${cur}) )
       return 0
