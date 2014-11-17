@@ -23,6 +23,7 @@ __maprcli()
   main_opts="acl alarm blacklist config dashboard  debugdb dialhome disk dump entity job license \
 nagios nfsmgmt node rlimit schedule security service setloglevel table task trace urls virtualip volume"
 
+# Handle the first set of options...
   case "${prev}" in
       acl)
       COMPREPLY=( $(compgen -W "show set edit" -- ${cur}) ) 
@@ -170,6 +171,17 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	  return 1
 	;;
 	
+      -name) # urls, services , 
+	  if [ $prev2 == "urls" ]; then
+	    COMPREPLY=( $(compgen -W "cldb tasktracker jobtracker nodemanager resourcemanager" -- ${cur}) )
+	    return 0
+	    fi
+	  if [ $prev2 == "services" ]; then
+	    COMPREPLY=( $(compgen -W "hs2 hue hivemeta httpfs nodemanager oozie resourcemanager historyserver" -- ${cur}) )
+	    return 0
+	    fi
+	    return 1
+	;;
     *)
     ;;
     esac
