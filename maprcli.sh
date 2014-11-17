@@ -20,7 +20,7 @@ __maprcli()
 
   service_action="start stop suspend resume restart"
   acl_opts="-type -name -cluster -user -group"
-  opts="acl alarm blacklist config dashboard  debugdb dialhome disk dump entity job license \
+  main_opts="acl alarm blacklist config dashboard  debugdb dialhome disk dump entity job license \
 nagios nfsmgmt node rlimit schedule security service setloglevel table task trace urls virtualip volume"
 
   case "${prev}" in
@@ -138,7 +138,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       return 0
 	;;
       urls)
-      COMPREPLY=( $(compgen -W "url" -- ${cur}) ) # FIXME
+      COMPREPLY=( $(compgen -W "-name -cluster -zkconnect" -- ${cur}) ) 
       return 0
 	;;
       virtualip)
@@ -176,7 +176,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 
     # complete the following only if current args < 2
   if [ $numArgs -le 2 ] ; then
-  COMPREPLY=($(compgen -W "${opts}" -- ${cur})) 
+  COMPREPLY=($(compgen -W "${main_opts}" -- ${cur})) 
   return 0
   fi
   
