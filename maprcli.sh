@@ -49,7 +49,23 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       COMPREPLY=( $(compgen -W "load save" -- ${cur}) )
       return 0
 	;;
-      dashboard)
+	
+	load) # config load. 
+	  if [ $prev2 == "config" ]; then
+	    COMPREPLY=( $(compgen -W "-keys -cluster" -- ${cur}) )
+	    return 0
+	    fi
+	    return 1
+	;;
+	save) # config load. 
+	  if [ $prev2 == "config" ]; then
+	    COMPREPLY=( $(compgen -W "-values -test -cluster" -- ${cur}) )
+	    return 0
+	    fi
+	    return 1
+	;;
+	
+	dashboard)
       COMPREPLY=( $(compgen -W "info" -- ${cur}) ) # FIXME
       return 0
 	;;
@@ -97,12 +113,12 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       heatmap listcldbs listzookeepers cldbmaster maintenance metrics listcldbzks" -- ${cur}) )
       return 0
 	;;
-	  services)
-         COMPREPLY=( $(compgen -W "-cluster -filter -zkconnect -nodes -cldb  -fileserver \
-	 -hbmaster -hbregionserver -jobtracker -nfs -tasktracker -webserver -name -action" -- ${cur}) )
-	 return 0
+	 services)
+	  COMPREPLY=( $(compgen -W "-cluster -filter -zkconnect -nodes -cldb  -fileserver \
+	  -hbmaster -hbregionserver -jobtracker -nfs -tasktracker -webserver -name -action" -- ${cur}) )
+	  return 0
 	  ;;
-	  -action|-cldb|-fileserver|-hbmaster|-hbregionserver|-jobtracker|-nfs|-tasktracker|-webserver) 
+	 -action|-cldb|-fileserver|-hbmaster|-hbregionserver|-jobtracker|-nfs|-tasktracker|-webserver) 
 	  COMPREPLY=( $(compgen -W "${service_action}" -- ${cur}) )
 	  return 0
 	    ;;	  
@@ -158,7 +174,8 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	sja sna sta swa sp tsa tla rp tms tmu trs tru cpt cpu vma vip vipe " -- ${cur}) )
       return 0
 	;;	
-      list)   # service , disk 
+	
+      list)   # service, node, disk 
 	  if [ $prev2 == "disk" ]; then
 	    COMPREPLY=( $(compgen -W "-host -system -output" -- ${cur}) )
 	    return 0
@@ -167,7 +184,11 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	    COMPREPLY=( $(compgen -W  "-alarmednodes -cluster -columns -filter -limit \
 	    -nfsnodes -output -start -zkconnect" -- ${cur}) )
 	    return 0
-	  fi
+	    fi
+	  if [ $prev2 == "service" ]; then
+	    COMPREPLY=( $(compgen -W  "-node -cluster -zkconnect -output" -- ${cur}) )
+	    return 0
+	    fi
 	  return 1
 	;;
 	
