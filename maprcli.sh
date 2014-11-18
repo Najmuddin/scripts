@@ -7,9 +7,14 @@
 # COMP_LINE: the current command line
 
 __list_all_nodes() {
-local nodes=$(maprcli node list -columns hn |awk '{print $1}'|tail -n +2)
-COMPREPLY=($(compgen -W "$nodes" -- ${cur}))
+      local nodes=$(maprcli node list -columns hn |awk '{print $1}'|tail -n +2)
+      COMPREPLY=($(compgen -W "$nodes" -- ${cur}))
   }
+
+__list_cluster(){
+      local clusters=$(awk '{print $1}' "/opt/mapr/conf/mapr-clusters.conf")
+      COMPREPLY=($(compgen -W "$clusters" -- ${cur}))
+}
 
 __maprcli()
   {
@@ -131,6 +136,11 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       -nodes|-node)
 	  __list_all_nodes
 	  ;;
+
+      -cluster)
+	  __list_cluster
+	  ;;
+	  
       rlimit)
       COMPREPLY=( $(compgen -W "set get" -- ${cur}) )
       return 0
@@ -203,7 +213,7 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	
       -name) # urls, services , 
 	  if [ $prev2 == "urls" ]; then
-	    COMPREPLY=( $(compgen -W "cldb tasktracker jobtracker nodemanager resourcemanager" -- ${cur}) )
+	    COMPREPLY=( $(compgen -W "cldb tasktracker jobtracker nodemanager resourcemanager historyserver" -- ${cur}) )
 	    return 0
 	    fi
 	  if [ $prev2 == "services" ]; then
