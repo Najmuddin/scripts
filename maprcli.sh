@@ -222,6 +222,27 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	    fi
 	    return 1
 	;;
+	
+	create) # table,volume schedule create 
+	  if [ $prev2 == "table" ]; then
+	    COMPREPLY=( $(compgen -W "-path -bulkloadperm -purgeperm -autosplitperm -regionsizeperm -modifyfamilyperm -encryptperm \
+	    -deletefamilyperm -versionsperm -compressionperm -memoryperm -readperm -writeperm -appendperm " -- ${cur}) )
+	    return 0
+	    fi
+	
+	  if [ $prev2 == "volume" ]; then
+	    COMPREPLY=( $(compgen -W "-name -type -advisoryquota -ae -aetype -cluster -createparent -group -localvolumehost -localvolumeport \
+	    -maxinodesalarmthreshold -minreplication -mount -path -quota -readonly -replication -replicationtype \
+	    -rereplicationtimeoutsec -rootdirperms -schedule -source  -topology -user" -- ${cur}) )
+	    return 0
+	    fi
+	  if [ $prev2 == "schedule" ]; then
+	    COMPREPLY=( $(compgen -W "-cluster -schedule" -- ${cur}) )
+	    return 0
+	    fi
+	    return 1
+	;;
+		
     *)
     ;;
     esac
