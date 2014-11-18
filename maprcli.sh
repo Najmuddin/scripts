@@ -16,9 +16,15 @@ __list_cluster(){
       COMPREPLY=($(compgen -W "$clusters" -- ${cur}))
 }
 
+__node_services(){
+      COMPREPLY=( $(compgen -W "-cluster -filter -zkconnect -nodes -cldb  -fileserver \
+      -hbmaster -hbregionserver -jobtracker -nfs -tasktracker -webserver -name -action" -- ${cur}) )
+}
+
 __maprcli()
   {
   local prev prev2 first numArgs acl_opts base 
+  json="-json"
   numArgs="${#COMP_WORDS[@]}"
 # Read the current, last and last to last arguments typed by the user.  
   cur="${COMP_WORDS[COMP_CWORD]}"
@@ -27,6 +33,7 @@ __maprcli()
     prev2="${COMP_WORDS[COMP_CWORD -2]}"
   fi
   first="${COMP_WORDS[1]}"
+  second="${COMP_WORDS[2]}"
 
   service_action="start stop suspend resume restart"
   acl_opts="-type -name -cluster -user -group"
@@ -125,9 +132,10 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       return 0
 	;;
 	 services)
-	  COMPREPLY=( $(compgen -W "-cluster -filter -zkconnect -nodes -cldb  -fileserver \
-	  -hbmaster -hbregionserver -jobtracker -nfs -tasktracker -webserver -name -action" -- ${cur}) )
-	  return 0
+	 __node_services
+# 	  COMPREPLY=( $(compgen -W "-cluster -filter -zkconnect -nodes -cldb  -fileserver \
+# 	  -hbmaster -hbregionserver -jobtracker -nfs -tasktracker -webserver -name -action" -- ${cur}) )
+# 	  return 0
 	  ;;
 	 -action|-cldb|-fileserver|-hbmaster|-hbregionserver|-jobtracker|-nfs|-tasktracker|-webserver) 
 	  COMPREPLY=( $(compgen -W "${service_action}" -- ${cur}) )
@@ -194,11 +202,15 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       return 0
 	;;	
 	
-      list)   # service, node, disk 
+      list)   # service, node, disk ,schedule
 	  if [ $prev2 == "disk" ]; then
 	    COMPREPLY=( $(compgen -W "-host -system -output" -- ${cur}) )
 	    return 0
 	    fi
+	  if [ $prev2 == "schedule" ]; then
+	    COMPREPLY=( $(compgen -W "$json" -- ${cur}) )
+	    return 0
+	    fi	    
 	  if [ $prev2 == "node" ]; then
 	    COMPREPLY=( $(compgen -W  "-alarmednodes -cluster -columns -filter -limit \
 	    -nfsnodes -output -start -zkconnect" -- ${cur}) )
@@ -244,6 +256,13 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
 	;;
 		
     *)
+     if [ $numArgs -gt 3 ] ; then
+	if  [ $first == "node" -a $second == "services" ]; then 
+	__node_services
+	return 0
+	fi
+     return 1
+     fi
     ;;
     esac
 
