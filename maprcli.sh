@@ -131,21 +131,18 @@ nagios nfsmgmt node rlimit schedule security service setloglevel table task trac
       heatmap listcldbs listzookeepers cldbmaster maintenance metrics listcldbzks" -- ${cur}) )
       return 0
 	;;
-	 services)
-	 __node_services
-# 	  COMPREPLY=( $(compgen -W "-cluster -filter -zkconnect -nodes -cldb  -fileserver \
-# 	  -hbmaster -hbregionserver -jobtracker -nfs -tasktracker -webserver -name -action" -- ${cur}) )
-# 	  return 0
+	services)
+	    __node_services
 	  ;;
-	 -action|-cldb|-fileserver|-hbmaster|-hbregionserver|-jobtracker|-nfs|-tasktracker|-webserver) 
+	-action|-cldb|-fileserver|-hbmaster|-hbregionserver|-jobtracker|-nfs|-tasktracker|-webserver) 
 	  COMPREPLY=( $(compgen -W "${service_action}" -- ${cur}) )
 	  return 0
 	    ;;
-      -nodes|-node)
+       -nodes|-node)
 	  __list_all_nodes
 	  ;;
 
-      -cluster)
+       -cluster)
 	  __list_cluster
 	  ;;
 	  
